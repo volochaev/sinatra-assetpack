@@ -1,5 +1,6 @@
 require 'rack/test'
 require 'sinatra'
+require 'pry'
 
 module Sinatra
   module AssetPack
@@ -10,7 +11,7 @@ module Sinatra
     # Returns a list of formats that can be served.
     # Anything not in this list will be rejected.
     def self.supported_formats
-      @supported_formats ||= %w(css js png jpg gif svg otf eot ttf woff htc ico)
+      @supported_formats ||= %w(css js png jpg gif svg otf eot ttf woff htc ico html)
     end
 
     # Returns a map of what MIME format each Tilt type returns.
@@ -20,10 +21,11 @@ module Sinatra
         Tilt.mappings.each do |format, (engine, _)|
           # @todo Remove when fix is merged in tilt
           # https://github.com/rtomayko/tilt/pull/206
-          next if engine.nil? 
+          next if engine.nil?
           case engine.default_mime_type
-          when 'text/css' then hash[format] = 'css'
+          when 'text/css'               then hash[format] = 'css'
           when 'application/javascript' then hash[format] = 'js'
+          when 'text/html'              then hash[format] = 'html'
           end
         end
 

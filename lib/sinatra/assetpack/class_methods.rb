@@ -87,9 +87,17 @@ module Sinatra
 
               @template_cache.fetch(fn) {
                 settings.assets.fetch_dynamic_asset(fn) {
-                  out = render format.to_sym, File.read(fn), :filename => fn
-                  out = asset_filter_css(out)  if fmt == 'css'
-                  out
+
+                  out = case fmt
+                        when 'html'
+                          if renderer = Tilt.mappings[format][0]
+                            renderer.new(fn).render
+                          end
+                        when 'css'
+                          asset_filter_css(render(format.to_sym, File.read(fn), filename: fn))
+                        else
+                          render format.to_sym, File.read(fn), :filename => fn
+                        end
                 }
               }
             end

@@ -83,7 +83,7 @@ module Sinatra
 
       def serve(path, options={})
         unless from = options[:from]
-          raise ArgumentError, "Parameter :from is required" 
+          raise ArgumentError, "Parameter :from is required"
         end
 
         expanded = expand_from(from)
