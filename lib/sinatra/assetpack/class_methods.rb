@@ -90,9 +90,7 @@ module Sinatra
 
                   out = case fmt
                         when 'html'
-                          if renderer = Tilt.mappings[format][0]
-                            renderer.new(fn).render
-                          end
+                          Tilt.new(fn, default_encoding: 'utf-8').render unless Tilt.mappings[format].empty?
                         when 'css'
                           asset_filter_css(render(format.to_sym, File.read(fn), filename: fn))
                         else
